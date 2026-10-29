@@ -1,0 +1,5 @@
+# Contains AWS access keys. Never commit this.
+.env
+*.tar
+/api
+/worker

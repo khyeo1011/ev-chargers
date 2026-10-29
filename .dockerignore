@@ -1,0 +1,7 @@
+.git
+.github
+.env
+*.tar
+k8s
+scripts
+README.md

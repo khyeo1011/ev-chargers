@@ -1,0 +1,27 @@
+# Runs on every push and PR: vet, test with the race detector, build both images.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go vet ./...
+      - run: go test -race -cover ./...
+
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cmd: [api, worker]
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build --build-arg CMD=${{ matrix.cmd }} -t ev-chargers-${{ matrix.cmd }}:ci .
